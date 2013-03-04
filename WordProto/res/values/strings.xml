@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">워디Go?!</string>
+    <string name="app_name">Wordy~Go?!</string>
     <string name="action_settings">Settings</string>
     <string name="combo">Combo!</string>
     <string name="start">시작</string>
