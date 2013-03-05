@@ -1,10 +1,9 @@
 package kr.dev.parktrio.park.wordygo;
 
-import android.R.color;
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,6 +19,10 @@ public class GameActivity extends Activity implements OnClickListener {
 		setContentView( R.layout.activity_game );
 		addEventListener();
 		startTimeProgress();
+		
+		//test
+		DatabaseManager dbMgr = new DatabaseManager( getApplicationContext() );
+		dbMgr.checkDB();
 	}
 
 	@Override
