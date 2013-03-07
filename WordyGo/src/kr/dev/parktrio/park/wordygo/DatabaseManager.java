@@ -10,7 +10,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
@@ -18,13 +22,68 @@ public class DatabaseManager {
 	private Context context;
 	private String dbDirPath;
 	private String dbFilePath;
+	private String dbRemotePath = "http://parktrio-wordygo-test.googlecode.com/files/words.db";
+	private SQLiteDatabase db;
+	private DatabaseHelper dbHelper;
+
+	private class DatabaseHelper extends SQLiteOpenHelper{
+	    private static final String DB_NAME = "words";  
+	    private static final int    DB_VER = 1;
+	      
+	    public DatabaseHelper(Context context) {  
+	        super(context, DB_NAME, null, DB_VER);  
+	    }  
+
+	    @Override  
+	    public void onCreate(SQLiteDatabase db) {
+	    	String sql = "create table level1(" +
+	 				"expression text primary key," +
+	 	            "characters text not null)";
+	 		db.execSQL(sql); 
+	    }  
+
+	    @Override  
+	    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {    
+	        db.execSQL("drop table if exist level1");  
+	        onCreate(db);
+	    }  
+	}
 
 	DatabaseManager( Context context ) {
 		this.context = context;
 		this.dbDirPath = Environment.getDataDirectory().getAbsolutePath() + "/data/" + context.getPackageName();
 		this.dbFilePath = Environment.getDataDirectory().getAbsolutePath() + "/data/" + context.getPackageName() + "/words.db";
+		this.dbHelper = new DatabaseHelper( context );
+		db = dbHelper.getWritableDatabase();
 	}
-	
+
+	public long insert( String table, String expression, String characters ){  
+        ContentValues values = new ContentValues();  
+        values.put( "expression", expression );  
+        values.put( "characters", characters );  
+        long result = db.insert( table, null, values );
+
+        return result;  
+    }
+
+	public Word[] selectAll( String tableName ) {
+ 		Cursor cursor = db.query(tableName, null, null, null, null, null, null);
+
+ 		Word[] result = new Word[ cursor.getCount() ];
+
+ 		int index = 0;
+ 		while ( cursor.moveToNext() ) {
+            String expression = cursor.getString( 0 );
+            String characters = cursor.getString( 1 );
+            
+            result[ index ] = new Word( expression, Utility.stringToStringArray( characters ) );
+            
+            index++;
+ 		}
+ 		
+ 		return result;
+ 	}
+/*	
 	public void checkDB() {
 		Log.d("Hwi", dbFilePath );
 		File dbFile = new File( dbFilePath );
@@ -49,7 +108,7 @@ public class DatabaseManager {
 				HttpURLConnection conn;
 
 				try {
-					url = new URL( "http://parktrio-wordygo-test.googlecode.com/files/words.db" );
+					url = new URL( dbRemotePath );
 					conn = ( HttpURLConnection )url.openConnection();
 
 					int lengthOnServer = conn.getContentLength();
@@ -91,6 +150,11 @@ public class DatabaseManager {
 						return;
 					}
 					Log.d("Hwi", "download complete!");
+					// test
+					openDB();
+					Word[] words = selectAll( "Level1" );
+					Log.d("Hwi", words[0].getExpression() );
+					
 				} catch ( MalformedURLException e ) {
 					e.printStackTrace();
 					Log.d("Hwi", "error3");
@@ -111,4 +175,22 @@ public class DatabaseManager {
 		});
 		thread.start();
 	}
+	
+	public void openDB() {
+		openDB( SQLiteDatabase.OPEN_READONLY );
+	}
+ 	
+ 	public void openDB( int accessFlags ) {
+ 		File dbCopy = new File( dbFilePath );
+ 		
+ 		if( dbCopy.exists() ){
+ 			SQLiteDatabase db = SQLiteDatabase.openDatabase(dbCopy.getAbsolutePath(), null, accessFlags);
+ 			this.db = db;
+ 		}
+ 	}
+
+ 	public void closeDB(){
+ 		this.db.close();
+ 	}
+*/
 }

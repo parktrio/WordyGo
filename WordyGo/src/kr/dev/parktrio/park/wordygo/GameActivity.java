@@ -1,5 +1,7 @@
 package kr.dev.parktrio.park.wordygo;
 
+import java.util.Random;
+
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,10 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class GameActivity extends Activity implements OnClickListener {
 
-	private final int MAX_BUTTON_COUNT = 25;
+	private final int MAX_BUTTON_COUNT = 30;
 	
 	private TimeManager timeMgr;
 	private Button[] arrayBtn;
@@ -28,8 +31,34 @@ public class GameActivity extends Activity implements OnClickListener {
 		startTimeProgress();
 		
 		//test
+		test();
+	}
+	
+	//test
+	private void insertForTest( DatabaseManager dbMgr ) {
+		dbMgr.insert( "level1", "서울", "ㅅㅓㅇㅜㄹ" );
+		dbMgr.insert( "level1", "부산", "ㅂㅜㅅㅏㄴ" );
+		dbMgr.insert( "level1", "대전", "ㄷㅐㅈㅓㄴ" );
+		dbMgr.insert( "level1", "대구", "ㄷㅐㄱㅜ" );
+		dbMgr.insert( "level1", "광주", "ㄱㅘㅇㅈㅜ" );
+		dbMgr.insert( "level1", "제주", "ㅈㅔㅈㅜ" );
+	}
+	
+	//test
+	private void test() {
 		DatabaseManager dbMgr = new DatabaseManager( getApplicationContext() );
-		dbMgr.checkDB();
+		insertForTest( dbMgr );
+		Word[] words = dbMgr.selectAll( "level1" );
+
+		Random rand = new Random();
+		int index = rand.nextInt( 6 );
+		
+		TextView textView = ( TextView )findViewById( R.id.word );
+		textView.setText( words[ index ].getExpression() );
+		
+		for ( int i = 0; i <  words[ index ].getWordUnit().length; i++ ) {
+			arrayBtn[ i ].setText( words[ index ].getWordUnit()[ i ] );
+		}
 	}
 
 	@Override
@@ -72,6 +101,11 @@ public class GameActivity extends Activity implements OnClickListener {
 		result[ 22 ] = R.id.b23;
 		result[ 23 ] = R.id.b24;
 		result[ 24 ] = R.id.b25;
+		result[ 25 ] = R.id.b26;
+		result[ 26 ] = R.id.b27;
+		result[ 27 ] = R.id.b28;
+		result[ 28 ] = R.id.b29;
+		result[ 29 ] = R.id.b30;
 		
 		return result;
 	}

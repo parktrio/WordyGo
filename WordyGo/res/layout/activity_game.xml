@@ -66,6 +66,10 @@
                 android:id="@+id/b5"
                 android:background="@drawable/button"
                 android:layout_weight="1" />
+            <Button 
+                android:id="@+id/b6"
+                android:background="@drawable/button"
+                android:layout_weight="1" />
         </TableRow>
         
         <TableRow
@@ -74,10 +78,6 @@
             android:layout_height="wrap_content"
             android:visibility="gone" >
 
-            <Button 
-                android:id="@+id/b6"
-                android:background="@drawable/button"
-                android:layout_weight="1" />
             <Button 
                 android:id="@+id/b7"
                 android:background="@drawable/button"
@@ -94,14 +94,6 @@
                 android:id="@+id/b10"
                 android:background="@drawable/button"
                 android:layout_weight="1" />
-        </TableRow>
-        
-        <TableRow
-            android:id="@+id/level3row"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" >
-
             <Button 
                 android:id="@+id/b11"
                 android:background="@drawable/button"
@@ -110,6 +102,14 @@
                 android:id="@+id/b12"
                 android:background="@drawable/button"
                 android:layout_weight="1" />
+        </TableRow>
+        
+        <TableRow
+            android:id="@+id/level3row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
+
             <Button 
                 android:id="@+id/b13"
                 android:background="@drawable/button"
@@ -122,14 +122,6 @@
                 android:id="@+id/b15"
                 android:background="@drawable/button"
                 android:layout_weight="1" />
-        </TableRow>
-        
-        <TableRow
-            android:id="@+id/level4row"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" >
-
             <Button 
                 android:id="@+id/b16"
                 android:background="@drawable/button"
@@ -142,6 +134,14 @@
                 android:id="@+id/b18"
                 android:background="@drawable/button"
                 android:layout_weight="1" />
+        </TableRow>
+        
+       	<TableRow
+            android:id="@+id/level4row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
+
             <Button 
                 android:id="@+id/b19"
                 android:background="@drawable/button"
@@ -150,14 +150,6 @@
                 android:id="@+id/b20"
                 android:background="@drawable/button"
                 android:layout_weight="1" />
-        </TableRow>
-        
-        <TableRow
-            android:id="@+id/level5row"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" >
-
             <Button 
                 android:id="@+id/b21"
                 android:background="@drawable/button"
@@ -174,8 +166,36 @@
                 android:id="@+id/b24"
                 android:background="@drawable/button"
                 android:layout_weight="1" />
+        </TableRow>
+        
+        <TableRow
+            android:id="@+id/level5row"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
+
             <Button 
                 android:id="@+id/b25"
+                android:background="@drawable/button"
+                android:layout_weight="1" />
+            <Button 
+                android:id="@+id/b26"
+                android:background="@drawable/button"
+                android:layout_weight="1" />
+            <Button 
+                android:id="@+id/b27"
+                android:background="@drawable/button"
+                android:layout_weight="1" />
+            <Button 
+                android:id="@+id/b28"
+                android:background="@drawable/button"
+                android:layout_weight="1" />
+            <Button 
+                android:id="@+id/b29"
+                android:background="@drawable/button"
+                android:layout_weight="1" />
+            <Button 
+                android:id="@+id/b30"
                 android:background="@drawable/button"
                 android:layout_weight="1" />
         </TableRow>
