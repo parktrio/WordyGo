@@ -1,11 +1,12 @@
 package kr.dev.parktrio.park.wordygo;
 
-import java.util.Random;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Color;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Vibrator;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,52 +14,35 @@ import android.widget.TextView;
 
 public class GameActivity extends Activity implements OnClickListener {
 
-	private final int MAX_BUTTON_COUNT = 30;
+	private final int MAX_BUTTON_COUNT = 9;
+	private final String EMPTY_STRING = "";
 	
 	private TimeManager timeMgr;
 	private Button[] arrayBtn;
 	private int[] btnIDs;
+	private GameContext gameContext;
+	private TextView currentWord;
+	private TextView combo;
+	private ActivityHandler activityHandler;
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		setContentView( R.layout.activity_game );
+		
+		activityHandler = new ActivityHandler();
 
+		gameContext = new GameContext( activityHandler );
+		gameContext.initialize();
+		gameContext.start();
+		
 		btnIDs = getButtonIDs();
 		arrayBtn = getButtons();
+		currentWord = ( TextView )findViewById( R.id.word );
+		combo = ( TextView )findViewById( R.id.combo );
 
 		addEventListener();
 		startTimeProgress();
-		
-		//test
-		test();
-	}
-	
-	//test
-	private void insertForTest( DatabaseManager dbMgr ) {
-		dbMgr.insert( "level1", "서울", "ㅅㅓㅇㅜㄹ" );
-		dbMgr.insert( "level1", "부산", "ㅂㅜㅅㅏㄴ" );
-		dbMgr.insert( "level1", "대전", "ㄷㅐㅈㅓㄴ" );
-		dbMgr.insert( "level1", "대구", "ㄷㅐㄱㅜ" );
-		dbMgr.insert( "level1", "광주", "ㄱㅘㅇㅈㅜ" );
-		dbMgr.insert( "level1", "제주", "ㅈㅔㅈㅜ" );
-	}
-	
-	//test
-	private void test() {
-		DatabaseManager dbMgr = new DatabaseManager( getApplicationContext() );
-		insertForTest( dbMgr );
-		Word[] words = dbMgr.selectAll( "level1" );
-
-		Random rand = new Random();
-		int index = rand.nextInt( 6 );
-		
-		TextView textView = ( TextView )findViewById( R.id.word );
-		textView.setText( words[ index ].getExpression() );
-		
-		for ( int i = 0; i <  words[ index ].getWordUnit().length; i++ ) {
-			arrayBtn[ i ].setText( words[ index ].getWordUnit()[ i ] );
-		}
 	}
 
 	@Override
@@ -66,6 +50,134 @@ public class GameActivity extends Activity implements OnClickListener {
 		super.onBackPressed();
 		finish();
 		overridePendingTransition( R.anim.fade, R.anim.hold );
+	}
+
+	private void setWordForGame( String word ) {
+		currentWord.setText( word );
+	}
+	
+	private void setButtonText( String[] characters ) {
+		switch ( characters.length ) {
+		case 4:
+			button4( characters );
+			break;
+		case 5:
+			button5( characters );
+			break;
+		case 6:
+			button6( characters );
+			break;
+		case 7:
+			button7( characters );
+			break;
+		case 8:
+			button8( characters );
+			break;
+		case 9:
+			button9( characters );
+			break;
+		}
+	}
+	
+	private void button4( String[] characters ) {
+		int index = 0;
+		for ( int i = 0; i <  characters.length; i++ ) {
+			switch ( index ) {
+			case 0:
+			case 2:
+			case 4:
+			case 6:
+				arrayBtn[ index ].setEnabled( false );
+				arrayBtn[ index ].setText( EMPTY_STRING );
+				index++;
+				break;
+			}
+			arrayBtn[ index ].setText( characters[ i ] );
+			arrayBtn[ index ].setEnabled( true );
+			index++;
+			if ( index == 8 ) {
+				arrayBtn[ index ].setEnabled( false );
+				arrayBtn[ index ].setText( EMPTY_STRING );
+			}
+		}
+	}
+	
+	private void button5( String[] characters ) {
+		int index = 0;
+		for ( int i = 0; i <  characters.length; i++ ) {
+			switch ( index ) {
+			case 0:
+			case 2:
+			case 6:
+				arrayBtn[ index ].setEnabled( false );
+				arrayBtn[ index ].setText( EMPTY_STRING );
+				index++;
+				break;
+			}
+			arrayBtn[ index ].setText( characters[ i ] );
+			arrayBtn[ index ].setEnabled( true );
+			index++;
+			if ( index == 8 ) {
+				arrayBtn[ index ].setEnabled( false );
+				arrayBtn[ index ].setText( EMPTY_STRING );
+			}
+		}
+	}
+	
+	private void button6( String[] characters ) {
+		int index = 0;
+		for ( int i = 0; i <  characters.length; i++ ) {
+			switch ( index ) {
+			case 1:
+			case 4:
+			case 7:
+				arrayBtn[ index ].setEnabled( false );
+				arrayBtn[ index ].setText( EMPTY_STRING );
+				index++;
+				break;
+			}
+			arrayBtn[ index ].setText( characters[ i ] );
+			arrayBtn[ index ].setEnabled( true );
+			index++;
+		}
+	}
+	
+	private void button7( String[] characters ) {
+		int index = 0;
+		for ( int i = 0; i <  characters.length; i++ ) {
+			switch ( index ) {
+			case 1:
+			case 7:
+				arrayBtn[ index ].setEnabled( false );
+				arrayBtn[ index ].setText( EMPTY_STRING );
+				index++;
+				break;
+			}
+			arrayBtn[ index ].setText( characters[ i ] );
+			arrayBtn[ index ].setEnabled( true );
+			index++;
+		}
+	}
+	
+	private void button8( String[] characters ) {
+		int index = 0;
+		for ( int i = 0; i <  characters.length; i++ ) {
+			if ( index == 4 ) {
+				arrayBtn[ index ].setEnabled( false );
+				arrayBtn[ index ].setText( EMPTY_STRING );
+				index++;
+			}
+			arrayBtn[ index ].setText( characters[ i ] );
+			arrayBtn[ index ].setEnabled( true );
+			index++;
+		}
+	}
+	
+	private void button9( String[] characters ) {
+		for ( int i = 0; i <  characters.length; i++ ) {
+			arrayBtn[ i ].setText( characters[ i ] );
+			arrayBtn[ i ].setEnabled( true );
+		}
 	}
 
 	private void startTimeProgress() {
@@ -85,27 +197,6 @@ public class GameActivity extends Activity implements OnClickListener {
 		result[ 6 ] = R.id.b7;
 		result[ 7 ] = R.id.b8;
 		result[ 8 ] = R.id.b9;
-		result[ 9 ] = R.id.b10;
-		result[ 10 ] = R.id.b11;
-		result[ 11 ] = R.id.b12;
-		result[ 12 ] = R.id.b13;
-		result[ 13 ] = R.id.b14;
-		result[ 14 ] = R.id.b15;
-		result[ 15 ] = R.id.b16;
-		result[ 16 ] = R.id.b17;
-		result[ 17 ] = R.id.b18;
-		result[ 18 ] = R.id.b19;
-		result[ 19 ] = R.id.b20;
-		result[ 20 ] = R.id.b21;
-		result[ 21 ] = R.id.b22;
-		result[ 22 ] = R.id.b23;
-		result[ 23 ] = R.id.b24;
-		result[ 24 ] = R.id.b25;
-		result[ 25 ] = R.id.b26;
-		result[ 26 ] = R.id.b27;
-		result[ 27 ] = R.id.b28;
-		result[ 28 ] = R.id.b29;
-		result[ 29 ] = R.id.b30;
 		
 		return result;
 	}
@@ -127,11 +218,58 @@ public class GameActivity extends Activity implements OnClickListener {
 	}
 
 	public void onClick( View v ) {
+		Vibrator vibe = ( Vibrator )getSystemService( Context.VIBRATOR_SERVICE );
+	    vibe.vibrate( 40 );
+
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
 			if ( v.equals( arrayBtn[ i ] ) ) {
+				gameContext.selectCharacter( arrayBtn[ i ].getText().toString() );
 				arrayBtn[ i ].setEnabled( false );
+				arrayBtn[ i ].setText( EMPTY_STRING );
 				break;
 			}
 		}
 	}
+	
+	@SuppressLint("HandlerLeak")
+	private class ActivityHandler extends Handler {
+		
+		private String word;
+		private String[] characters;
+		
+		@Override
+		public void handleMessage(Message msg) {
+			switch ( msg.what ) {
+			case 1:
+				word = ( String )msg.obj;
+				setWordForGame( word );
+				break;
+			case 2:
+				characters = ( String[] )msg.obj;
+				setButtonText( characters );
+				break;
+			case 3:
+				//for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
+				//	arrayBtn[ i ].setEnabled( true );
+				//}
+				setButtonText( characters );
+				combo.setText( EMPTY_STRING );
+				break;
+			case 4:
+				//for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
+				//	arrayBtn[ i ].setEnabled( true );
+				//	arrayBtn[ i ].setText( EMPTY_STRING );
+				//}
+				StringBuilder sb = new StringBuilder();
+				sb.append( msg.arg1 );
+				sb.append( getResources().getString( R.string.combo ) );
+				combo.setText( sb.toString() );
+
+				gameContext.start();
+				break;
+			}
+		}
+		
+	}
+
 }

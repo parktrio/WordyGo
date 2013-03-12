@@ -1,0 +1,9 @@
+package kr.dev.parktrio.park.wordygo;
+
+public enum VerdictState {
+	VERDICT_STATE_NONE,
+	VERDICT_STATE_IN_PROCESS,
+	VERDICT_STATE_INCORRECT_FINISH,
+	VERDICT_STATE_CORRECT_FINISH,
+	VERDICT_STATE_ERROR
+}

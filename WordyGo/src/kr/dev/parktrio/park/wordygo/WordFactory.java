@@ -5,7 +5,10 @@ public class WordFactory {
 	private final int MAX_LENGTH = 50;
 	
 	public Word[] makeWordsForLevel1() {
-		Word[] wordList = new Word[ MAX_LENGTH ];
+		DatabaseManager dbMgr = DatabaseManager.getInstance();
+		Word[] wordList = dbMgr.selectAll( "level1" );
+
+		//Word[] wordList = new Word[ MAX_LENGTH ];
 		
 		for ( int i = 0; i < MAX_LENGTH; i++ ) {
 		}
