@@ -18,7 +18,7 @@ public class WordFactory {
 
 	public Word[] makeWordsForLevel2() {
 		Word[] wordList = new Word[ MAX_LENGTH ];
-		
+
 		for ( int i = 0; i < MAX_LENGTH; i++ ) {
 		}
 

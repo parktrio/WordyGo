@@ -20,12 +20,15 @@ public class GameContext {
 
 	private Word[] wordOfLevel1;
 
+	private int index;
+
 	GameContext( Handler handler ) {
 		activityHandler = handler;
 		verdictMgr = new VerdictManager();
 		gameResultMgr = new GameResultManager();
 		wordFactory = new WordFactory();
 		rand = new Random();
+		index = 0;
 	}
 
 	public void initialize() {
@@ -35,7 +38,7 @@ public class GameContext {
 
 	public void start() {
 		// TODO
-		int index = rand.nextInt( wordOfLevel1.length );
+		//int index = rand.nextInt( wordOfLevel1.length );
 		Message msg1 = activityHandler.obtainMessage();
 		msg1.what = SET_WORD_TEXT;
 		msg1.obj = wordOfLevel1[ index ].getExpression();
@@ -76,6 +79,7 @@ public class GameContext {
 			activityHandler.sendMessage( msg1 );
 			break;
 		case VERDICT_STATE_CORRECT_FINISH:
+			this.index++;
 			gameResultMgr.adjustGameResult( GameResultState.GAME_RESULT_STATE_CORRECT );
 
 			Message msg2 = activityHandler.obtainMessage();

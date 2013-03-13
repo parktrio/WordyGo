@@ -12,7 +12,9 @@
     <Button
         android:id="@+id/startBtn"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:textSize="20sp"
+        android:background="@drawable/button"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="@string/start" />

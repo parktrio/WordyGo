@@ -81,100 +81,116 @@ public class GameActivity extends Activity implements OnClickListener {
 	
 	private void button4( String[] characters ) {
 		int index = 0;
-		for ( int i = 0; i <  characters.length; i++ ) {
-			switch ( index ) {
-			case 0:
-			case 2:
+		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
+			switch ( i ) {
 			case 4:
 			case 6:
-				arrayBtn[ index ].setEnabled( false );
-				arrayBtn[ index ].setText( EMPTY_STRING );
+			case 7:
+			case 8:
+				arrayBtn[ i ].setText( characters[ index ] );
+				arrayBtn[ i ].setEnabled( true );
 				index++;
 				break;
-			}
-			arrayBtn[ index ].setText( characters[ i ] );
-			arrayBtn[ index ].setEnabled( true );
-			index++;
-			if ( index == 8 ) {
-				arrayBtn[ index ].setEnabled( false );
-				arrayBtn[ index ].setText( EMPTY_STRING );
+			default:
+				arrayBtn[ i ].setEnabled( false );
+				arrayBtn[ i ].setText( EMPTY_STRING );
+				break;
 			}
 		}
 	}
 	
 	private void button5( String[] characters ) {
 		int index = 0;
-		for ( int i = 0; i <  characters.length; i++ ) {
-			switch ( index ) {
-			case 0:
-			case 2:
+		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
+			switch ( i ) {
+			case 4:
+			case 5:
 			case 6:
-				arrayBtn[ index ].setEnabled( false );
-				arrayBtn[ index ].setText( EMPTY_STRING );
+			case 7:
+			case 8:
+				arrayBtn[ i ].setText( characters[ index ] );
+				arrayBtn[ i ].setEnabled( true );
 				index++;
 				break;
-			}
-			arrayBtn[ index ].setText( characters[ i ] );
-			arrayBtn[ index ].setEnabled( true );
-			index++;
-			if ( index == 8 ) {
-				arrayBtn[ index ].setEnabled( false );
-				arrayBtn[ index ].setText( EMPTY_STRING );
+			default:
+				arrayBtn[ i ].setEnabled( false );
+				arrayBtn[ i ].setText( EMPTY_STRING );
+				break;
 			}
 		}
 	}
 	
 	private void button6( String[] characters ) {
 		int index = 0;
-		for ( int i = 0; i <  characters.length; i++ ) {
-			switch ( index ) {
+		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
+			switch ( i ) {
 			case 1:
+			case 2:
 			case 4:
+			case 6:
 			case 7:
-				arrayBtn[ index ].setEnabled( false );
-				arrayBtn[ index ].setText( EMPTY_STRING );
+			case 8:
+				arrayBtn[ i ].setText( characters[ index ] );
+				arrayBtn[ i ].setEnabled( true );
 				index++;
 				break;
+			default:
+				arrayBtn[ i ].setEnabled( false );
+				arrayBtn[ i ].setText( EMPTY_STRING );
+				break;
 			}
-			arrayBtn[ index ].setText( characters[ i ] );
-			arrayBtn[ index ].setEnabled( true );
-			index++;
 		}
 	}
 	
 	private void button7( String[] characters ) {
 		int index = 0;
-		for ( int i = 0; i <  characters.length; i++ ) {
-			switch ( index ) {
+		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
+			switch ( i ) {
+			case 0:
 			case 1:
-			case 7:
-				arrayBtn[ index ].setEnabled( false );
-				arrayBtn[ index ].setText( EMPTY_STRING );
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+				arrayBtn[ i ].setText( characters[ index ] );
+				arrayBtn[ i ].setEnabled( true );
 				index++;
 				break;
+			default:
+				arrayBtn[ i ].setEnabled( false );
+				arrayBtn[ i ].setText( EMPTY_STRING );
+				break;
 			}
-			arrayBtn[ index ].setText( characters[ i ] );
-			arrayBtn[ index ].setEnabled( true );
-			index++;
 		}
 	}
 	
 	private void button8( String[] characters ) {
 		int index = 0;
-		for ( int i = 0; i <  characters.length; i++ ) {
-			if ( index == 4 ) {
-				arrayBtn[ index ].setEnabled( false );
-				arrayBtn[ index ].setText( EMPTY_STRING );
+		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
+			switch ( i ) {
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 8:
+				arrayBtn[ i ].setText( characters[ index ] );
+				arrayBtn[ i ].setEnabled( true );
 				index++;
+				break;
+			default:
+				arrayBtn[ i ].setEnabled( false );
+				arrayBtn[ i ].setText( EMPTY_STRING );
+				break;
 			}
-			arrayBtn[ index ].setText( characters[ i ] );
-			arrayBtn[ index ].setEnabled( true );
-			index++;
 		}
 	}
 	
 	private void button9( String[] characters ) {
-		for ( int i = 0; i <  characters.length; i++ ) {
+		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
 			arrayBtn[ i ].setText( characters[ i ] );
 			arrayBtn[ i ].setEnabled( true );
 		}
@@ -197,7 +213,7 @@ public class GameActivity extends Activity implements OnClickListener {
 		result[ 6 ] = R.id.b7;
 		result[ 7 ] = R.id.b8;
 		result[ 8 ] = R.id.b9;
-		
+
 		return result;
 	}
 
@@ -219,7 +235,7 @@ public class GameActivity extends Activity implements OnClickListener {
 
 	public void onClick( View v ) {
 		Vibrator vibe = ( Vibrator )getSystemService( Context.VIBRATOR_SERVICE );
-	    vibe.vibrate( 40 );
+	    vibe.vibrate( 30 );
 
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
 			if ( v.equals( arrayBtn[ i ] ) ) {
