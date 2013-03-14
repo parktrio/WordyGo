@@ -9,6 +9,8 @@
     <string name="back">지우기</string>
     <string name="boost">BOOST</string>
     <string name="item">ITEM</string>
+    <string name="mps">m/s</string>
+    <string name="distance">m</string>
 
 	<string name="c_1">ㄱ</string>
 	<string name="c_2">ㄴ</string>

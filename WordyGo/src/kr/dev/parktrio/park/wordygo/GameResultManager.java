@@ -4,6 +4,10 @@ public class GameResultManager {
 	
 	private int combo = 0;
 	private int maxCombo = 0;
+	private int defaultMps = 1;
+	private int currentMps = 1;
+	private int maxMps = 1;
+	private int distance = 0;
 	private ScoreManager scoreMgr;
 	
 	GameResultManager() {
@@ -14,12 +18,25 @@ public class GameResultManager {
 		switch ( result ) {
 		case GAME_RESULT_STATE_CORRECT:
 			combo++;
+			currentMps = defaultMps + ( combo / 5 );
+			maxCombo = combo > maxCombo ? combo : maxCombo;
+			maxMps = currentMps > maxMps ? currentMps : maxMps;
 			break;
 		case GAME_RESULT_STATE_INCORRECT:
 			maxCombo = combo > maxCombo ? combo : maxCombo;
+			maxMps = currentMps > maxMps ? currentMps : maxMps;
 			combo = 0;
+			currentMps = defaultMps;
 			break;
 		}
+	}
+	
+	public int getMps() {
+		return currentMps;
+	}
+	
+	public int getDistance() {
+		return distance;
 	}
 
 	public int getCombo() {

@@ -36,6 +36,11 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="kr.dev.parktrio.park.wordygo.ResultActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

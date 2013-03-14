@@ -11,6 +11,7 @@ public class GameContext {
 	private final int SET_BUTTON_TEXT = 2;
 	private final int INCORRECT = 3;
 	private final int CORRECT = 4;
+	private final int SET_DISTANCE = 6;
 
 	private VerdictManager verdictMgr;
 	private GameResultManager gameResultMgr;
@@ -62,6 +63,14 @@ public class GameContext {
 	public void end() {
 		// TODO
 	}
+	
+	public int getMps() {
+		return gameResultMgr.getMps();
+	}
+	
+	public int getDistance() {
+		return gameResultMgr.getDistance();
+	}
 
 	public void selectCharacter( String character ) {
 		// TODO
@@ -85,6 +94,7 @@ public class GameContext {
 			Message msg2 = activityHandler.obtainMessage();
 			msg2.what = CORRECT;
 			msg2.arg1 = gameResultMgr.getCombo();
+			msg2.arg2 = gameResultMgr.getCombo() * gameResultMgr.getMps();
 			activityHandler.sendMessage( msg2 );
 			break;
 		}

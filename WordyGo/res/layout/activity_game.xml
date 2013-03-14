@@ -128,7 +128,7 @@
                     android:layout_margin="5dp"
                     android:background="@drawable/button"
                     android:textSize="12sp"
-                    android:text="@string/boost"
+                    android:text="@string/item"
                     android:enabled="false" />
 
                 <Button
@@ -171,5 +171,27 @@
         android:layout_marginRight="10dp"
         android:textIsSelectable="false"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <TextView
+        android:id="@+id/mps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/time"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:textIsSelectable="false"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/time"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textIsSelectable="false" />
 
 </RelativeLayout>
