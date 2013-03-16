@@ -13,7 +13,7 @@ public final class DatabaseManager {
 	//private String dbRemotePath = "http://parktrio-wordygo-test.googlecode.com/files/words.db";
 	private SQLiteDatabase db;
 	private DatabaseHelper dbHelper;
-	
+
 	private static final class SingletonHolder {
 		static final DatabaseManager singleton = new DatabaseManager();
 	}
@@ -21,7 +21,7 @@ public final class DatabaseManager {
 	private class DatabaseHelper extends SQLiteOpenHelper{
 	    private static final String DB_NAME = "words";  
 	    private static final int    DB_VER = 1;
-	      
+
 	    public DatabaseHelper(Context context) {  
 	        super(context, DB_NAME, null, DB_VER);  
 	    }  
@@ -40,7 +40,7 @@ public final class DatabaseManager {
 	        db.execSQL("drop table if exist level1");  
 	        onCreate( db );
 	    }
-	    
+
 	    //test
 	    private void insertColumn( SQLiteDatabase db, String table, String expression, String characters ) {
 	    	ContentValues values = new ContentValues();  
@@ -48,7 +48,7 @@ public final class DatabaseManager {
 	        values.put( "characters", characters );  
 	        db.insert( table, null, values );
 	    }
-	    
+
 		//test
 		private void insertForTest( SQLiteDatabase db ) {
 			insertLevel1( db );
@@ -140,12 +140,12 @@ public final class DatabaseManager {
  		while ( cursor.moveToNext() ) {
             String expression = cursor.getString( 0 );
             String characters = cursor.getString( 1 );
-            
+
             result[ index ] = new Word( expression, Utility.stringToStringArray( characters ) );
-            
+
             index++;
  		}
- 		
+
  		return result;
  	}
 /*	

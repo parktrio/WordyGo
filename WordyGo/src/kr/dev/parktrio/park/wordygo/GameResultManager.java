@@ -1,6 +1,9 @@
 package kr.dev.parktrio.park.wordygo;
 
-public class GameResultManager {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class GameResultManager implements Parcelable {
 	
 	private int combo = 0;
 	private int maxCombo = 0;
@@ -8,11 +11,51 @@ public class GameResultManager {
 	private int currentMps = 1;
 	private int maxMps = 1;
 	private int distance = 0;
-	private ScoreManager scoreMgr;
+	//private ScoreManager scoreMgr;
 	
 	GameResultManager() {
-		scoreMgr = new ScoreManager();
+		//scoreMgr = new ScoreManager();
 	}
+
+	GameResultManager( Parcel in ) {
+		readFromParcel( in );
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		dest.writeInt( combo );
+		dest.writeInt( maxCombo );
+		dest.writeInt( defaultMps );
+		dest.writeInt( currentMps );
+		dest.writeInt( maxMps );
+		dest.writeInt( distance );
+	}
+
+	private void readFromParcel( Parcel in ) {
+		combo = in.readInt();
+		maxCombo = in.readInt();
+		defaultMps = in.readInt();
+		currentMps = in.readInt();
+		maxMps = in.readInt();
+		distance = in.readInt();
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+		public GameResultManager createFromParcel( Parcel in ) {
+			return new GameResultManager( in );
+		}
+		public GameResultManager[] newArray( int size ) {
+			return new GameResultManager[ size ];
+		}
+	};
 
 	public void adjustGameResult( GameResultState result ) {
 		switch ( result ) {
@@ -34,6 +77,10 @@ public class GameResultManager {
 	public int getMps() {
 		return currentMps;
 	}
+
+	public int getMaxMps() {
+		return maxMps;
+	}
 	
 	public int getDistance() {
 		return distance;
@@ -47,8 +94,12 @@ public class GameResultManager {
 		return maxCombo;
 	}
 
-	public int getScore() {
-		return scoreMgr.getTotalScore();
+	//public int getScore() {
+	//	return scoreMgr.getTotalScore();
+	//}
+
+	public void setDistance( int distance ) {
+		this.distance = distance;
 	}
 
 }

@@ -6,12 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 
 public class GameContext {
-	
-	private final int SET_WORD_TEXT = 1;
-	private final int SET_BUTTON_TEXT = 2;
-	private final int INCORRECT = 3;
-	private final int CORRECT = 4;
-	private final int SET_DISTANCE = 6;
 
 	private VerdictManager verdictMgr;
 	private GameResultManager gameResultMgr;
@@ -41,35 +35,43 @@ public class GameContext {
 		// TODO
 		//int index = rand.nextInt( wordOfLevel1.length );
 		Message msg1 = activityHandler.obtainMessage();
-		msg1.what = SET_WORD_TEXT;
+		msg1.what = MessageWhat.SET_WORD_TEXT;
 		msg1.obj = wordOfLevel1[ index ].getExpression();
 
 		activityHandler.sendMessage( msg1 );
 
 		verdictMgr.setWord( wordOfLevel1[ index ].getWordUnit() );
 		String[] shuffledStr = Utility.shuffleStrings( wordOfLevel1[ index ].getWordUnit() );
-		
+
 		Message msg2 = activityHandler.obtainMessage();
-		msg2.what = SET_BUTTON_TEXT;
+		msg2.what = MessageWhat.SET_BUTTON_TEXT;
 		msg2.obj = shuffledStr;
 
 		activityHandler.sendMessage( msg2 );
 	}
-	
+
 	public void restart() {
-		
+	
 	}
 
 	public void end() {
 		// TODO
 	}
-	
+
 	public int getMps() {
 		return gameResultMgr.getMps();
 	}
-	
+
 	public int getDistance() {
 		return gameResultMgr.getDistance();
+	}
+
+	public void setDistance( int distance ) {
+		gameResultMgr.setDistance( distance );
+	}
+
+	public GameResultManager getResultManager() {
+		return gameResultMgr;
 	}
 
 	public void selectCharacter( String character ) {
@@ -83,8 +85,7 @@ public class GameContext {
 			gameResultMgr.adjustGameResult( GameResultState.GAME_RESULT_STATE_INCORRECT );
 
 			Message msg1 = activityHandler.obtainMessage();
-			msg1.what = INCORRECT;
-			msg1.arg1 = 6;
+			msg1.what = MessageWhat.INCORRECT;
 			activityHandler.sendMessage( msg1 );
 			break;
 		case VERDICT_STATE_CORRECT_FINISH:
@@ -92,7 +93,7 @@ public class GameContext {
 			gameResultMgr.adjustGameResult( GameResultState.GAME_RESULT_STATE_CORRECT );
 
 			Message msg2 = activityHandler.obtainMessage();
-			msg2.what = CORRECT;
+			msg2.what = MessageWhat.CORRECT;
 			msg2.arg1 = gameResultMgr.getCombo();
 			msg2.arg2 = gameResultMgr.getCombo() * gameResultMgr.getMps();
 			activityHandler.sendMessage( msg2 );

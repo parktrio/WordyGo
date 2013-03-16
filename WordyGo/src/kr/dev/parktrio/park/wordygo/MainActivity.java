@@ -32,8 +32,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick( View v ) {
-		if ( v.equals( startBtn ) )
-		{
+		if ( v.equals( startBtn ) ) {
 			Intent gameIntent = new Intent( this, GameActivity.class );
 			startActivity( gameIntent );
 			overridePendingTransition( R.anim.fade, R.anim.hold );

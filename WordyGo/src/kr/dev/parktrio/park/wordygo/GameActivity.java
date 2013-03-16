@@ -3,7 +3,7 @@ package kr.dev.parktrio.park.wordygo;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Rect;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,14 +18,7 @@ public class GameActivity extends Activity implements OnClickListener {
 
 	private final int MAX_BUTTON_COUNT = 9;
 	private final String EMPTY_STRING = "";
-	
-	private final int SET_WORD_TEXT = 1;
-	private final int SET_BUTTON_TEXT = 2;
-	private final int INCORRECT = 3;
-	private final int CORRECT = 4;
-	private final int SET_TIME = 5;
-	private final int SET_DISTANCE = 6;
-	
+
 	private TimeManager timeMgr;
 	private Button[] arrayBtn;
 	private int[] btnIDs;
@@ -41,13 +34,13 @@ public class GameActivity extends Activity implements OnClickListener {
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 		setContentView( R.layout.activity_game );
-		
+
 		activityHandler = new ActivityHandler();
 
 		gameContext = new GameContext( activityHandler );
 		gameContext.initialize();
 		gameContext.start();
-		
+
 		btnIDs = getButtonIDs();
 		arrayBtn = getButtons();
 		currentWord = ( TextView )findViewById( R.id.word );
@@ -67,10 +60,21 @@ public class GameActivity extends Activity implements OnClickListener {
 		overridePendingTransition( R.anim.fade, R.anim.hold );
 	}
 
+	private void endGame() {
+		Intent resultIntent = new Intent( this, ResultActivity.class );
+		resultIntent.putExtra("GameResultManager", getResultManager() );
+		startActivity( resultIntent );
+		finish();
+	}
+	
+	private GameResultManager getResultManager() {
+		return gameContext.getResultManager();
+	}
+
 	private void setWordForGame( String word ) {
 		currentWord.setText( word );
 	}
-	
+
 	private void setButtonText( String[] characters ) {
 		switch ( characters.length ) {
 		case 4:
@@ -93,7 +97,7 @@ public class GameActivity extends Activity implements OnClickListener {
 			break;
 		}
 	}
-	
+
 	private void button4( String[] characters ) {
 		int index = 0;
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
@@ -113,7 +117,7 @@ public class GameActivity extends Activity implements OnClickListener {
 			}
 		}
 	}
-	
+
 	private void button5( String[] characters ) {
 		int index = 0;
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
@@ -134,7 +138,7 @@ public class GameActivity extends Activity implements OnClickListener {
 			}
 		}
 	}
-	
+
 	private void button6( String[] characters ) {
 		int index = 0;
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
@@ -156,7 +160,7 @@ public class GameActivity extends Activity implements OnClickListener {
 			}
 		}
 	}
-	
+
 	private void button7( String[] characters ) {
 		int index = 0;
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
@@ -179,7 +183,7 @@ public class GameActivity extends Activity implements OnClickListener {
 			}
 		}
 	}
-	
+
 	private void button8( String[] characters ) {
 		int index = 0;
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
@@ -203,7 +207,7 @@ public class GameActivity extends Activity implements OnClickListener {
 			}
 		}
 	}
-	
+
 	private void button9( String[] characters ) {
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
 			arrayBtn[ i ].setText( characters[ i ] );
@@ -212,7 +216,6 @@ public class GameActivity extends Activity implements OnClickListener {
 	}
 
 	private void startTimeProgress() {
-		//timeMgr = new TimeManager( this );
 		timeMgr = new TimeManager( activityHandler );
 		timeMgr.start();
 	}
@@ -235,11 +238,11 @@ public class GameActivity extends Activity implements OnClickListener {
 
 	private Button[] getButtons() {
 		Button[] result = new Button[ MAX_BUTTON_COUNT ];
-		
+
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
 			result[ i ] = ( Button )findViewById( btnIDs[ i ] );
 		}
-		
+
 		return result;
 	}
 
@@ -262,32 +265,37 @@ public class GameActivity extends Activity implements OnClickListener {
 			}
 		}
 	}
-	
+
 	@SuppressLint("HandlerLeak")
 	private class ActivityHandler extends Handler {
-		
+
 		private String word;
 		private String[] characters;
 		private int currentDistance;
-		
+
 		@Override
 		public void handleMessage(Message msg) {
 			StringBuilder sb;
 
 			switch ( msg.what ) {
-			case SET_WORD_TEXT:
+			case MessageWhat.SET_WORD_TEXT:
 				word = ( String )msg.obj;
 				setWordForGame( word );
 				break;
-			case SET_BUTTON_TEXT:
+			case MessageWhat.SET_BUTTON_TEXT:
 				characters = ( String[] )msg.obj;
 				setButtonText( characters );
 				break;
-			case INCORRECT:
+			case MessageWhat.INCORRECT:
 				setButtonText( characters );
 				combo.setText( EMPTY_STRING );
+
+				sb = new StringBuilder();
+				sb.append( gameContext.getMps() );
+				sb.append( getResources().getString( R.string.mps ) );
+				mps.setText( sb.toString() );
 				break;
-			case CORRECT:
+			case MessageWhat.CORRECT:
 				sb = new StringBuilder();
 				sb.append( msg.arg1 );
 				sb.append( getResources().getString( R.string.combo ) );
@@ -299,9 +307,14 @@ public class GameActivity extends Activity implements OnClickListener {
 				sb.append( getResources().getString( R.string.distance ) );
 				distance.setText( sb.toString() );
 
+				sb.delete( 0, sb.length() );
+				sb.append( gameContext.getMps() );
+				sb.append( getResources().getString( R.string.mps ) );
+				mps.setText( sb.toString() );
+
 				gameContext.start();
 				break;
-			case SET_TIME:
+			case MessageWhat.SET_TIME:
 				if ( msg.arg1 <= 10 ) {
 					progressBar.setProgressDrawable( getResources().getDrawable( R.drawable.progressbar_red ) );
 				} else {
@@ -321,11 +334,13 @@ public class GameActivity extends Activity implements OnClickListener {
 
 				currentDistance += gameContext.getMps();
 				break;
-			case SET_DISTANCE:
+			case MessageWhat.TIME_END:
+				gameContext.setDistance( currentDistance );
+				endGame();
 				break;
 			}
 		}
-		
+
 	}
 
 }
