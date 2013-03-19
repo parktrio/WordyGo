@@ -9,6 +9,7 @@ public class GameContext {
 
 	private VerdictManager verdictMgr;
 	private GameResultManager gameResultMgr;
+	private ItemRandomManager itemRandomMgr;
 	private WordFactory wordFactory;
 	private Random rand;
 	private Handler activityHandler;
@@ -21,6 +22,7 @@ public class GameContext {
 		activityHandler = handler;
 		verdictMgr = new VerdictManager();
 		gameResultMgr = new GameResultManager();
+		itemRandomMgr = new ItemRandomManager();
 		wordFactory = new WordFactory();
 		rand = new Random();
 		index = 0;
@@ -37,7 +39,6 @@ public class GameContext {
 		Message msg1 = activityHandler.obtainMessage();
 		msg1.what = MessageWhat.SET_WORD_TEXT;
 		msg1.obj = wordOfLevel1[ index ].getExpression();
-
 		activityHandler.sendMessage( msg1 );
 
 		verdictMgr.setWord( wordOfLevel1[ index ].getWordUnit() );
@@ -46,8 +47,15 @@ public class GameContext {
 		Message msg2 = activityHandler.obtainMessage();
 		msg2.what = MessageWhat.SET_BUTTON_TEXT;
 		msg2.obj = shuffledStr;
-
 		activityHandler.sendMessage( msg2 );
+
+		RandomGameItem item = itemRandomMgr.getItem( wordOfLevel1[ index ].getWordUnit().length );
+		if ( item != null ) {
+			Message msg3 = activityHandler.obtainMessage();
+			msg3.what = MessageWhat.RANDOM_ITEM;
+			msg3.obj = item;
+			activityHandler.sendMessage( msg3 );
+		}
 	}
 
 	public void restart() {

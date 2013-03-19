@@ -7,8 +7,8 @@ public class GameResultManager implements Parcelable {
 	
 	private int combo = 0;
 	private int maxCombo = 0;
-	private int defaultMps = 1;
-	private int currentMps = 1;
+	private int defaultMps = 10;
+	private int currentMps = 10;
 	private int maxMps = 1;
 	private int distance = 0;
 	//private ScoreManager scoreMgr;
@@ -61,7 +61,7 @@ public class GameResultManager implements Parcelable {
 		switch ( result ) {
 		case GAME_RESULT_STATE_CORRECT:
 			combo++;
-			currentMps = defaultMps + ( combo / 5 );
+			currentMps = defaultMps + ( ( combo / 5 ) * 10 );
 			maxCombo = combo > maxCombo ? combo : maxCombo;
 			maxMps = currentMps > maxMps ? currentMps : maxMps;
 			break;

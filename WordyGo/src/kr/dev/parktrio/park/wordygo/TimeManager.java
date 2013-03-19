@@ -7,7 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 
 public class TimeManager {
-	private final int MAXTIME = 10;
+	private final int MAXTIME = 60;
 
 	private Handler activityHandler;
 	private Timer timer;

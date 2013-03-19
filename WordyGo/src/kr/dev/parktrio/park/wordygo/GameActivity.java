@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 public class GameActivity extends Activity implements OnClickListener {
 
-	private final int MAX_BUTTON_COUNT = 9;
+	private final int MAX_BUTTON_COUNT = 11;
 	private final String EMPTY_STRING = "";
 
 	private TimeManager timeMgr;
@@ -56,6 +56,7 @@ public class GameActivity extends Activity implements OnClickListener {
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
+		timeMgr.stop();
 		finish();
 		overridePendingTransition( R.anim.fade, R.anim.hold );
 	}
@@ -97,6 +98,18 @@ public class GameActivity extends Activity implements OnClickListener {
 			break;
 		}
 	}
+	
+	private void enabledButtonReset( Button btn, String character ) {
+		btn.setText( character );
+		btn.setEnabled( true );
+		btn.setSelected( false );
+		btn.setTextColor( getResources().getColor( R.color.button_text ) );
+	}
+
+	private void disabledButtonReset( Button btn ) {
+		btn.setEnabled( false );
+		btn.setText( EMPTY_STRING );
+	}
 
 	private void button4( String[] characters ) {
 		int index = 0;
@@ -104,15 +117,13 @@ public class GameActivity extends Activity implements OnClickListener {
 			switch ( i ) {
 			case 4:
 			case 6:
-			case 7:
 			case 8:
-				arrayBtn[ i ].setText( characters[ index ] );
-				arrayBtn[ i ].setEnabled( true );
+			case 9:
+				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
 				index++;
 				break;
 			default:
-				arrayBtn[ i ].setEnabled( false );
-				arrayBtn[ i ].setText( EMPTY_STRING );
+				disabledButtonReset( arrayBtn[ i ] );
 				break;
 			}
 		}
@@ -125,15 +136,13 @@ public class GameActivity extends Activity implements OnClickListener {
 			case 4:
 			case 5:
 			case 6:
-			case 7:
 			case 8:
-				arrayBtn[ i ].setText( characters[ index ] );
-				arrayBtn[ i ].setEnabled( true );
+			case 9:
+				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
 				index++;
 				break;
 			default:
-				arrayBtn[ i ].setEnabled( false );
-				arrayBtn[ i ].setText( EMPTY_STRING );
+				disabledButtonReset( arrayBtn[ i ] );
 				break;
 			}
 		}
@@ -149,13 +158,11 @@ public class GameActivity extends Activity implements OnClickListener {
 			case 3:
 			case 4:
 			case 6:
-				arrayBtn[ i ].setText( characters[ index ] );
-				arrayBtn[ i ].setEnabled( true );
+				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
 				index++;
 				break;
 			default:
-				arrayBtn[ i ].setEnabled( false );
-				arrayBtn[ i ].setText( EMPTY_STRING );
+				disabledButtonReset( arrayBtn[ i ] );
 				break;
 			}
 		}
@@ -172,13 +179,11 @@ public class GameActivity extends Activity implements OnClickListener {
 			case 4:
 			case 5:
 			case 6:
-				arrayBtn[ i ].setText( characters[ index ] );
-				arrayBtn[ i ].setEnabled( true );
+				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
 				index++;
 				break;
 			default:
-				arrayBtn[ i ].setEnabled( false );
-				arrayBtn[ i ].setText( EMPTY_STRING );
+				disabledButtonReset( arrayBtn[ i ] );
 				break;
 			}
 		}
@@ -195,23 +200,37 @@ public class GameActivity extends Activity implements OnClickListener {
 			case 4:
 			case 5:
 			case 6:
-			case 8:
-				arrayBtn[ i ].setText( characters[ index ] );
-				arrayBtn[ i ].setEnabled( true );
+			case 9:
+				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
 				index++;
 				break;
 			default:
-				arrayBtn[ i ].setEnabled( false );
-				arrayBtn[ i ].setText( EMPTY_STRING );
+				disabledButtonReset( arrayBtn[ i ] );
 				break;
 			}
 		}
 	}
 
 	private void button9( String[] characters ) {
+		int index = 0;
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
-			arrayBtn[ i ].setText( characters[ i ] );
-			arrayBtn[ i ].setEnabled( true );
+			switch ( i ) {
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 8:
+			case 9:
+				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
+				index++;
+				break;
+			default:
+				disabledButtonReset( arrayBtn[ i ] );
+				break;
+			}
 		}
 	}
 
@@ -223,15 +242,17 @@ public class GameActivity extends Activity implements OnClickListener {
 	private int[] getButtonIDs() {
 		int[] result = new int[ MAX_BUTTON_COUNT ];
 
-		result[ 0 ] = R.id.b1;
-		result[ 1 ] = R.id.b2;
-		result[ 2 ] = R.id.b3;
-		result[ 3 ] = R.id.b4;
-		result[ 4 ] = R.id.b5;
-		result[ 5 ] = R.id.b6;
-		result[ 6 ] = R.id.b7;
-		result[ 7 ] = R.id.b8;
-		result[ 8 ] = R.id.b9;
+		result[ 0 ] = R.id.b0;
+		result[ 1 ] = R.id.b1;
+		result[ 2 ] = R.id.b2;
+		result[ 3 ] = R.id.b3;
+		result[ 4 ] = R.id.b4;
+		result[ 5 ] = R.id.b5;
+		result[ 6 ] = R.id.b6;
+		result[ 7 ] = R.id.b7;
+		result[ 8 ] = R.id.b8;
+		result[ 9 ] = R.id.b9;
+		result[ 10 ] = R.id.b10;
 
 		return result;
 	}
@@ -259,8 +280,10 @@ public class GameActivity extends Activity implements OnClickListener {
 		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
 			if ( v.equals( arrayBtn[ i ] ) ) {
 				gameContext.selectCharacter( arrayBtn[ i ].getText().toString() );
-				arrayBtn[ i ].setEnabled( false );
-				arrayBtn[ i ].setText( EMPTY_STRING );
+				//arrayBtn[ i ].setEnabled( false );
+				//arrayBtn[ i ].setText( EMPTY_STRING );
+				arrayBtn[ i ].setSelected( true );
+				arrayBtn[ i ].setTextColor( getResources().getColor( R.color.selected_button_text ) );
 				break;
 			}
 		}
@@ -271,7 +294,7 @@ public class GameActivity extends Activity implements OnClickListener {
 
 		private String word;
 		private String[] characters;
-		private int currentDistance;
+		private int currentDistance = 0;
 
 		@Override
 		public void handleMessage(Message msg) {

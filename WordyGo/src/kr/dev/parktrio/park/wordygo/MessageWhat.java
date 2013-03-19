@@ -7,4 +7,5 @@ public class MessageWhat {
 	public static final int CORRECT = 4;
 	public static final int SET_TIME = 5;
 	public static final int TIME_END = 6;
+	public static final int RANDOM_ITEM = 7;
 }
