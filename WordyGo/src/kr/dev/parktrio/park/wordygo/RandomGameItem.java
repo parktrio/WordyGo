@@ -13,7 +13,7 @@ public class RandomGameItem extends GameItem {
 		this.index = index;
 	}
 
-	public int getItemindex() {
+	public int getItemIndex() {
 		return index;
 	}
 }

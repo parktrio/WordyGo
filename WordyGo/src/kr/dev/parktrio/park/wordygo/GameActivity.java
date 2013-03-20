@@ -49,7 +49,6 @@ public class GameActivity extends Activity implements OnClickListener {
 		distance = ( TextView )findViewById( R.id.distance );
 		progressBar = ( ProgressBar )findViewById( R.id.time );
 
-		addEventListener();
 		startTimeProgress();
 	}
 
@@ -77,161 +76,62 @@ public class GameActivity extends Activity implements OnClickListener {
 	}
 
 	private void setButtonText( String[] characters ) {
+		int[] buttonState = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		switch ( characters.length ) {
 		case 4:
-			button4( characters );
+			buttonState = ButtonState.character4;
 			break;
 		case 5:
-			button5( characters );
+			buttonState = ButtonState.character5;
 			break;
 		case 6:
-			button6( characters );
+			buttonState = ButtonState.character6;
 			break;
 		case 7:
-			button7( characters );
+			buttonState = ButtonState.character7;
 			break;
 		case 8:
-			button8( characters );
+			buttonState = ButtonState.character8;
 			break;
 		case 9:
-			button9( characters );
+			buttonState = ButtonState.character9;
 			break;
 		}
+
+		int index = 0;
+		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
+			if ( buttonState[ i ] == 1 ) {
+				enabledButtonSet( arrayBtn[ i ], characters[ index ] );
+				index++;
+			} else {
+				disabledButtonSet( arrayBtn[ i ] );
+			}
+		}
 	}
-	
-	private void enabledButtonReset( Button btn, String character ) {
+
+	@SuppressWarnings("deprecation")
+	private void enabledButtonSet( Button btn, String character ) {
 		btn.setText( character );
 		btn.setEnabled( true );
-		btn.setSelected( false );
 		btn.setTextColor( getResources().getColor( R.color.button_text ) );
+		btn.setBackgroundDrawable( getResources().getDrawable( R.drawable.button ) );
+
+		btn.setOnClickListener( this );
 	}
 
-	private void disabledButtonReset( Button btn ) {
+	@SuppressWarnings("deprecation")
+	private void disabledButtonSet( Button btn ) {
 		btn.setEnabled( false );
 		btn.setText( EMPTY_STRING );
+		btn.setBackgroundDrawable( getResources().getDrawable( R.drawable.button_disable ) );
+
+		btn.setOnClickListener( null );
 	}
 
-	private void button4( String[] characters ) {
-		int index = 0;
-		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
-			switch ( i ) {
-			case 4:
-			case 6:
-			case 8:
-			case 9:
-				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
-				index++;
-				break;
-			default:
-				disabledButtonReset( arrayBtn[ i ] );
-				break;
-			}
-		}
-	}
-
-	private void button5( String[] characters ) {
-		int index = 0;
-		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
-			switch ( i ) {
-			case 4:
-			case 5:
-			case 6:
-			case 8:
-			case 9:
-				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
-				index++;
-				break;
-			default:
-				disabledButtonReset( arrayBtn[ i ] );
-				break;
-			}
-		}
-	}
-
-	private void button6( String[] characters ) {
-		int index = 0;
-		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
-			switch ( i ) {
-			case 0:
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-			case 6:
-				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
-				index++;
-				break;
-			default:
-				disabledButtonReset( arrayBtn[ i ] );
-				break;
-			}
-		}
-	}
-
-	private void button7( String[] characters ) {
-		int index = 0;
-		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
-			switch ( i ) {
-			case 0:
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
-				index++;
-				break;
-			default:
-				disabledButtonReset( arrayBtn[ i ] );
-				break;
-			}
-		}
-	}
-
-	private void button8( String[] characters ) {
-		int index = 0;
-		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
-			switch ( i ) {
-			case 0:
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-			case 9:
-				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
-				index++;
-				break;
-			default:
-				disabledButtonReset( arrayBtn[ i ] );
-				break;
-			}
-		}
-	}
-
-	private void button9( String[] characters ) {
-		int index = 0;
-		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
-			switch ( i ) {
-			case 0:
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-			case 8:
-			case 9:
-				enabledButtonReset( arrayBtn[ i ], characters[ index ] );
-				index++;
-				break;
-			default:
-				disabledButtonReset( arrayBtn[ i ] );
-				break;
-			}
-		}
+	@SuppressWarnings("deprecation")
+	private void itemButtonSet( Button btn ) {
+		btn.setEnabled( true );
+		btn.setBackgroundDrawable( getResources().getDrawable( R.drawable.button_item ) );
 	}
 
 	private void startTimeProgress() {
@@ -267,12 +167,6 @@ public class GameActivity extends Activity implements OnClickListener {
 		return result;
 	}
 
-	private void addEventListener() {
-		for ( int i = 0; i < MAX_BUTTON_COUNT; i++ ) {
-			arrayBtn[ i ].setOnClickListener( this );
-		}
-	}
-
 	public void onClick( View v ) {
 		Vibrator vibe = ( Vibrator )getSystemService( Context.VIBRATOR_SERVICE );
 	    vibe.vibrate( 30 );
@@ -282,7 +176,7 @@ public class GameActivity extends Activity implements OnClickListener {
 				gameContext.selectCharacter( arrayBtn[ i ].getText().toString() );
 				//arrayBtn[ i ].setEnabled( false );
 				//arrayBtn[ i ].setText( EMPTY_STRING );
-				arrayBtn[ i ].setSelected( true );
+				arrayBtn[ i ].setEnabled( false );
 				arrayBtn[ i ].setTextColor( getResources().getColor( R.color.selected_button_text ) );
 				break;
 			}
@@ -360,6 +254,10 @@ public class GameActivity extends Activity implements OnClickListener {
 			case MessageWhat.TIME_END:
 				gameContext.setDistance( currentDistance );
 				endGame();
+				break;
+			case MessageWhat.RANDOM_ITEM:
+				RandomGameItem item = ( RandomGameItem )msg.obj;
+				itemButtonSet( arrayBtn[ item.getItemIndex() ] );
 				break;
 			}
 		}

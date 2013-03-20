@@ -45,139 +45,48 @@ public class ItemRandomManager {
 
 	private int getRandomIndex( int characterLength ) {
 		int result = -1;
-		
+		int[] buttonState = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		int length = 0;
+
 		switch( characterLength ) {
 		case 4:
-			result = getIndexFor4();
+			buttonState = ButtonState.character4;
+			length = ITEM_INDEX_LENGHT_4;
 			break;
 		case 5:
-			result = getIndexFor5();
+			buttonState = ButtonState.character5;
+			length = ITEM_INDEX_LENGHT_5;
 			break;
 		case 6:
-			result = getIndexFor6();
+			buttonState = ButtonState.character6;
+			length = ITEM_INDEX_LENGHT_6;
 			break;
 		case 7:
-			result = getIndexFor7();
+			buttonState = ButtonState.character7;
+			length = ITEM_INDEX_LENGHT_7;
 			break;
 		case 8:
-			result = getIndexFor8();
+			buttonState = ButtonState.character8;
+			length = ITEM_INDEX_LENGHT_8;
 			break;
 		case 9:
-			result = getIndexFor9();
+			buttonState = ButtonState.character9;
+			length = ITEM_INDEX_LENGHT_9;
 			break;
+		}
+		
+		int index = rand.nextInt( length );
+		int check = 0;
+		for ( int i = 0; i < buttonState.length; i++ ) {
+			if ( buttonState[ i ] == 0 ) {
+				if ( index == check ) {
+					result = i;
+					break;
+				}
+				check++;
+			}
 		}
 		
 		return result;
-	}
-
-	private int getIndexFor4() {
-		int index = rand.nextInt( ITEM_INDEX_LENGHT_4 );
-		
-		switch ( index ) {
-		case 4:
-			index = 5;
-			break;
-		case 5:
-			index = 7;
-			break;
-		case 6:
-			index = 10;
-			break;
-		}
-		
-		return index;
-	}
-
-	private int getIndexFor5() {
-		int index = rand.nextInt( ITEM_INDEX_LENGHT_5 );
-		
-		switch ( index ) {
-		case 4:
-			index = 7;
-			break;
-		case 5:
-			index = 10;
-			break;
-		}
-		
-		return index;
-	}
-	
-	private int getIndexFor6() {
-		int index = rand.nextInt( ITEM_INDEX_LENGHT_6 );
-		
-		switch ( index ) {
-		case 0:
-			index = 5;
-			break;
-		case 1:
-			index = 7;
-			break;
-		case 2:
-			index = 8;
-			break;
-		case 3:
-			index = 9;
-			break;
-		case 4:
-			index = 10;
-			break;
-		}
-		
-		return index;
-	}
-	
-	private int getIndexFor7() {
-		int index = rand.nextInt( ITEM_INDEX_LENGHT_7 );
-		
-		switch ( index ) {
-		case 0:
-			index = 7;
-			break;
-		case 1:
-			index = 8;
-			break;
-		case 2:
-			index = 9;
-			break;
-		case 3:
-			index = 10;
-			break;
-		}
-
-		return index;
-	}
-	
-	private int getIndexFor8() {
-		int index = rand.nextInt( ITEM_INDEX_LENGHT_8 );
-		
-		switch ( index ) {
-		case 0:
-			index = 7;
-			break;
-		case 1:
-			index = 8;
-			break;
-		case 2:
-			index = 10;
-			break;
-		}
-
-		return index;
-	}
-	
-	private int getIndexFor9() {
-		int index = rand.nextInt( ITEM_INDEX_LENGHT_9 );
-		
-		switch ( index ) {
-		case 0:
-			index = 7;
-			break;
-		case 1:
-			index = 10;
-			break;
-		}
-
-		return index;
 	}
 }
