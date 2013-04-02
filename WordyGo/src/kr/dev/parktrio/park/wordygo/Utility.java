@@ -3,7 +3,17 @@ package kr.dev.parktrio.park.wordygo;
 import java.util.Random;
 
 public final class Utility {
+	
+	private static String characterSet = "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㄲㄸㅃㅆㅉㄳㄵㄶㄺㄻㄼㄽㄾㄿㅀㅄㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣㅐㅒㅔㅖㅘㅙㅚㅝㅞㅟㅢ";
 
+	public static int stringToMotion( String str ) {
+		int result;
+
+		result = characterSet.indexOf( str ) + 1;
+		
+		return result;
+	}
+	
 	public static String[] stringToStringArray( String str ) {
 		String[] result = new String[ str.length() ];
 

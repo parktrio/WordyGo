@@ -14,5 +14,6 @@
     <string name="mps">m/s</string>
     <string name="distance">m</string>
     <string name="total">총 </string>
+    <string name="menu">menu</string>
 
 </resources>

@@ -28,6 +28,16 @@ public class GameContext {
 		index = 0;
 	}
 
+	GameContext() {
+		activityHandler = null;
+		verdictMgr = new VerdictManager();
+		gameResultMgr = new GameResultManager();
+		itemRandomMgr = new ItemRandomManager();
+		wordFactory = new WordFactory();
+		rand = new Random();
+		index = 0;
+	}
+
 	public void initialize() {
 		wordOfLevel1 = wordFactory.makeWordsForLevel1();
 		// TODO
@@ -35,7 +45,12 @@ public class GameContext {
 
 	public void start() {
 		// TODO
+		// test
+		if ( activityHandler == null ) {
+			return;
+		}
 		//int index = rand.nextInt( wordOfLevel1.length );
+		/*
 		Message msg1 = activityHandler.obtainMessage();
 		msg1.what = MessageWhat.SET_WORD_TEXT;
 		msg1.obj = wordOfLevel1[ index ].getExpression();
@@ -56,6 +71,7 @@ public class GameContext {
 			msg3.obj = item;
 			activityHandler.sendMessage( msg3 );
 		}
+		*/
 	}
 
 	public void restart() {
@@ -64,6 +80,19 @@ public class GameContext {
 
 	public void end() {
 		// TODO
+	}
+	
+	public String getString() {
+		return wordOfLevel1[ index ].getExpression();
+	}
+	
+	public String[] getButtonString() {
+		verdictMgr.setWord( wordOfLevel1[ index ].getWordUnit() );
+		return Utility.shuffleStrings( wordOfLevel1[ index ].getWordUnit() );
+	}
+	
+	public RandomGameItem getRandomItem() {
+		return itemRandomMgr.getItem( wordOfLevel1[ index ].getWordUnit().length );
 	}
 
 	public int getMps() {
