@@ -13,6 +13,12 @@ public final class Utility {
 		
 		return result;
 	}
+
+	public static String motionToString( int motion ) {
+		if ( motion < 1 && motion > 51 ) return null;
+		
+		return Character.toString( characterSet.charAt( motion - 1 ) );
+	}
 	
 	public static String[] stringToStringArray( String str ) {
 		String[] result = new String[ str.length() ];
@@ -22,6 +28,35 @@ public final class Utility {
 		}
 		
 		return result;
+	}
+
+	public static int getNumberOfDecimal( int z )
+    {
+        if      ( z > 999999999) return 10;
+        else if ( z > 99999999) return 9;
+        else if ( z > 9999999) return 8;
+        else if ( z > 999999) return 7;
+        else if ( z > 99999) return 6;
+        else if ( z > 9999) return 5;
+        else if ( z > 999) return 4;
+        else if ( z > 99) return 3;
+        else if ( z > 9) return 2;
+
+        else return 1;
+    }
+	
+	public static int getNumber( int decimal, int pos ) {
+		int numOfDec = getNumberOfDecimal( decimal );
+		
+		if ( numOfDec < pos ) return -1;
+		
+		if ( numOfDec == 1 ) return decimal;
+		
+		if ( pos == 1 ) {
+			return decimal % ( (int)Math.pow( 10, (pos) ) );
+		}
+
+		return ( decimal % ( (int)Math.pow( 10, (pos) ) ) ) / (int)Math.pow( 10, (pos - 1) );
 	}
 	
 	public static String[] shuffleStrings( String[] str ) {

@@ -13,6 +13,7 @@ public class GameContext {
 	private WordFactory wordFactory;
 	private Random rand;
 	private Handler activityHandler;
+	private GameMain main;
 
 	private Word[] wordOfLevel1;
 
@@ -28,8 +29,9 @@ public class GameContext {
 		index = 0;
 	}
 
-	GameContext() {
+	GameContext( GameMain gameMain) {
 		activityHandler = null;
+		main = gameMain;
 		verdictMgr = new VerdictManager();
 		gameResultMgr = new GameResultManager();
 		itemRandomMgr = new ItemRandomManager();
@@ -47,6 +49,7 @@ public class GameContext {
 		// TODO
 		// test
 		if ( activityHandler == null ) {
+			main.setButton();
 			return;
 		}
 		//int index = rand.nextInt( wordOfLevel1.length );
@@ -106,11 +109,44 @@ public class GameContext {
 	public void setDistance( int distance ) {
 		gameResultMgr.setDistance( distance );
 	}
+	
+	public int getCombo() {
+		return gameResultMgr.getCombo();
+	}
 
 	public GameResultManager getResultManager() {
 		return gameResultMgr;
 	}
+	
+	public void selectCharacter( String character ) {
+		VerdictState verdictState = verdictMgr.doVerdict( character );
 
+		switch ( verdictState ) {
+		case VERDICT_STATE_IN_PROCESS:
+			break;
+		case VERDICT_STATE_INCORRECT_FINISH:
+			gameResultMgr.adjustGameResult( GameResultState.GAME_RESULT_STATE_INCORRECT );
+			main.resetButton();
+			main.currentCombo = 0;
+			break;
+		case VERDICT_STATE_CORRECT_FINISH:
+			this.index++;
+			gameResultMgr.adjustGameResult( GameResultState.GAME_RESULT_STATE_CORRECT );
+			main.currentCombo = gameResultMgr.getCombo();
+			main.currentDistance += gameResultMgr.getCombo() * gameResultMgr.getMps();
+			
+			start();
+			/*
+			Message msg2 = activityHandler.obtainMessage();
+			msg2.what = MessageWhat.CORRECT;
+			msg2.arg1 = gameResultMgr.getCombo();
+			msg2.arg2 = gameResultMgr.getCombo() * gameResultMgr.getMps();
+			activityHandler.sendMessage( msg2 );
+			*/
+			break;
+		}
+	}
+/*
 	public void selectCharacter( String character ) {
 		// TODO
 		VerdictState verdictState = verdictMgr.doVerdict( character );
@@ -137,4 +173,5 @@ public class GameContext {
 			break;
 		}
 	}
+*/
 }

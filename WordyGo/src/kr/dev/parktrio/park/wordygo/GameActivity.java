@@ -218,7 +218,7 @@ public class GameActivity extends Activity implements OnClickListener {
 				sb.append( getResources().getString( R.string.combo ) );
 				combo.setText( sb.toString() );
 
-				currentDistance += msg.arg1;
+				currentDistance += msg.arg2;
 				sb.delete( 0, sb.length() );
 				sb.append( currentDistance );
 				sb.append( getResources().getString( R.string.distance ) );

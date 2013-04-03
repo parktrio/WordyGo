@@ -35,7 +35,27 @@ public class GameMain
 	private Sprite spaceSpr = new Sprite();
 	private GameObject space[] = new GameObject[9];
 	
-	private Font font = new Font();
+	private Sprite numberSpr = new Sprite();
+	private Sprite comboSpr = new Sprite();
+	private Sprite mpsSpr = new Sprite();
+	private Sprite distanceSpr = new Sprite();
+	
+	private GameObject distanceNum[] = new GameObject[10];
+	private GameObject comboNum[] = new GameObject[10];
+	private GameObject mpsNum[] = new GameObject[10];
+	
+	private GameObject distanceText = new GameObject();
+	private GameObject comboText = new GameObject();
+	private GameObject mpsText = new GameObject();
+	
+	private Font title = new Font();
+	private Font combo = new Font();
+	private Font mps = new Font();
+	private Font distance = new Font();
+	
+	public float currentDistance = 0;
+	public int currentCombo = 0;
+	public int currentMps = 1;
 	
 	public float speed = 0.1f;
 	public float scroll = 3.0f;
@@ -47,6 +67,9 @@ public class GameMain
 		for ( int i = 0; i < Button.length; i++ ) Button[i] = new ButtonObject();
 		for ( int i = 0; i < space.length; i++ ) space[i] = new GameObject();
 		for ( int i = 0; i < BtnDisabled.length; i++ ) BtnDisabled[i] = new Boolean( false );
+		for ( int i = 0; i < distanceNum.length; i++ ) distanceNum[i] = new GameObject();
+		for ( int i = 0; i < comboNum.length; i++ ) comboNum[i] = new GameObject();
+		for ( int i = 0; i < mpsNum.length; i++ ) mpsNum[i] = new GameObject();
 	}
 
 	public void LoadButtons() {
@@ -71,11 +94,11 @@ public class GameMain
 	
 	public void LoadGom() {
 		normalGomSpr.LoadSprite( mGL, MainContext, R.drawable.gom01, "normal.spr" );
-		normalGom.SetObject( normalGomSpr, 0, 0, 240, 300, 0, 0 );
+		normalGom.SetObject( normalGomSpr, 0, 0, 240, 350, 0, 0 );
 		normalGom.scroll = false;
 
 		flyingGomSpr.LoadSprite( mGL, MainContext, R.drawable.gom01, "flying.spr" );
-		flyingGom.SetObject( flyingGomSpr, 0, 0, 240, 300, 0, 0 );
+		flyingGom.SetObject( flyingGomSpr, 0, 0, 240, 350, 0, 0 );
 		flyingGom.scroll = false;
 	}
 	
@@ -93,17 +116,59 @@ public class GameMain
 			}
 		}
 	}
+	
+	public void LoadScore() {
+		numberSpr.LoadSprite( mGL, MainContext, R.drawable.number, "number.spr" );
+		distanceSpr.LoadSprite( mGL, MainContext, R.drawable.number, "distance.spr" );
+		comboSpr.LoadSprite( mGL, MainContext, R.drawable.number, "combo.spr" );
+		mpsSpr.LoadSprite( mGL, MainContext, R.drawable.number, "mps.spr" );
 
-	public void LoadGameData() {				
+		//distance
+		distanceText.SetObject( distanceSpr, 0, 0, 240, 50, 0, 0 );
+		distanceText.SetZoom( gInfo, 1.5f, 1.5f );
+		distanceText.scroll = false;
+		for ( int i = 0; i < distanceNum.length; i++ ) {
+			distanceNum[i].SetObject( numberSpr, 0, 0, 0, 50, 0, 0);
+			distanceNum[i].scroll = false;
+			distanceNum[i].SetZoom( gInfo, 1.5f, 1.5f );
+		}
+		
+		//combo
+		comboText.SetObject( comboSpr, 0, 0, 430, 120, 0, 0 );
+		comboText.scroll = false;
+		for ( int i = 0; i < comboNum.length; i++ ) {
+			comboNum[i].SetObject( numberSpr, 0, 0, 0, 120, 0, 0);
+			comboNum[i].scroll = false;
+		}
+		
+		//mps
+		mpsText.SetObject( mpsSpr, 0, 0, 25, 120, 0, 0 );
+		mpsText.scroll = false;
+		for ( int i = 0; i < mpsNum.length; i++ ) {
+			mpsNum[i].SetObject( numberSpr, 0, 0, 0, 120, 0, 0);
+			mpsNum[i].scroll = false;
+		}
+	}
+
+	public void LoadGameData() {
 		LoadSpace();
 		LoadGom();
 		LoadButtons();
+		LoadScore();
 
-		gameContext = new GameContext();
+		gameContext = new GameContext( this );
 		gameContext.initialize();
 		gameContext.start();
+	}
 
-		setButton();
+	public void resetButton() {
+		for ( int i = 0; i < Button.length; i++ ) {
+			if ( Button[i].motion > 0 && Button[i].motion < 52 ) {
+				Button[i].ResetButton();
+				Button[i].frame = 0;
+				BtnDisabled[i] = false;
+			}
+		}
 	}
 	
 	public void setButton() {
@@ -150,11 +215,13 @@ public class GameMain
 	}
 	
 	private void enabledButtonSet( ButtonObject btn, String character ) {
+		btn.ResetButton();
 		btn.motion = Utility.stringToMotion(character);
 		btn.frame = 0;
 	}
 	
 	private void disabledButtonSet( ButtonObject btn ) {
+		btn.ResetButton();
 		btn.motion = 0;
 		btn.frame = 0;
 	}
@@ -184,6 +251,10 @@ public class GameMain
 				Vibrator vibe = ( Vibrator )MainContext.getSystemService( Context.VIBRATOR_SERVICE );
 			    vibe.vibrate( 25 );
 				Button[i].frame = 1;
+				if ( Button[i].motion > 51 ) {
+				} else {
+					gameContext.selectCharacter( Utility.motionToString( Button[i].motion ) );
+				}
 			}
 		}
 		/*
@@ -218,17 +289,65 @@ public class GameMain
 		
 		for ( int i = 0; i < Button.length; i++ ) Button[i].DrawSprite(mGL, gInfo, null);
 	}
+	
+	public void UpdateFont() {
+		//Word Title
+		title.BeginFont();
+		title.SetArea( 120, 150, 360, 250 );
+		String str = gameContext.getString();
+		title.DrawFont( mGL, 240 - ( str.length() * 40 ), 150, 80, str );
+		title.EndFont();
+	}
+	
+	public void UpdateDistance() {
+		int numOfDec = Utility.getNumberOfDecimal( (int)currentDistance );
+		float startX = 240 - ( (( numOfDec * 30 ) + 37.5f ) / 2 ) + 15;
+		
+		for ( int i = numOfDec; i > 0; i-- ) {
+			distanceNum[i-1].frame = Utility.getNumber( (int)currentDistance, i );
+			distanceNum[i-1].x = startX;
+			distanceNum[i-1].DrawSprite( gInfo );
+			startX += 30;
+		}
+
+		distanceText.x = startX;
+		distanceText.DrawSprite( gInfo );
+		
+		//test
+		currentDistance += speed;
+	}
+	
+	public void UpdateCombo() {
+		if ( currentCombo == 0 ) return;
+		
+		int numOfDec = Utility.getNumberOfDecimal( currentCombo );
+		float startX = 480 - ( (( numOfDec * 20 ) + 100 )) + 10;
+		
+		for ( int i = numOfDec; i > 0; i-- ) {
+			comboNum[i-1].frame = Utility.getNumber( currentCombo, i );
+			comboNum[i-1].x = startX;
+			comboNum[i-1].DrawSprite( gInfo );
+			startX += 20;
+		}
+
+		comboText.DrawSprite( gInfo );
+	}
+	
+	public void UpdateMps() {
+		mpsText.DrawSprite( gInfo );
+	}
+	
+	public void UpdateScore() {
+		UpdateDistance();
+		UpdateCombo();
+		//UpdateMps();
+	}
 
 	public void DoGame() {
 		UpdateGame();
+		UpdateFont();
+		UpdateScore();
 
 		gInfo.ScrollX += ( scroll * ( speed + 0.3f ) );
-		
-		//Word Title
-		font.BeginFont();
-		font.SetArea( 120, 100, 360, 200 );
-		String str = gameContext.getString();
-		font.DrawFont( mGL, 240 - ( str.length() * 40 ), 100, 80, str );
-		font.EndFont();
 	}
 }
