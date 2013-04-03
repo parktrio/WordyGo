@@ -128,12 +128,14 @@ public class GameContext {
 			gameResultMgr.adjustGameResult( GameResultState.GAME_RESULT_STATE_INCORRECT );
 			main.resetButton();
 			main.currentCombo = 0;
+			main.speed = 0.2f;
 			break;
 		case VERDICT_STATE_CORRECT_FINISH:
 			this.index++;
 			gameResultMgr.adjustGameResult( GameResultState.GAME_RESULT_STATE_CORRECT );
 			main.currentCombo = gameResultMgr.getCombo();
 			main.currentDistance += gameResultMgr.getCombo() * gameResultMgr.getMps();
+			if ( main.speed < 2.5f ) main.speed += 0.1f;
 			
 			start();
 			/*
