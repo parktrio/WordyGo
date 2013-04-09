@@ -25,6 +25,16 @@ public final class DatabaseManager {
 		public void onCreate(SQLiteDatabase db) {
 			TableWrapperLevelXX tableLebel01 = new TableWrapperLevelXX(1);
 			tableLebel01.createTable(db);
+			TableWrapperLevelXX tableLebel02 = new TableWrapperLevelXX(2);
+			tableLebel02.createTable(db);
+			TableWrapperLevelXX tableLebel03 = new TableWrapperLevelXX(3);
+			tableLebel03.createTable(db);
+			TableWrapperLevelXX tableLebel04 = new TableWrapperLevelXX(4);
+			tableLebel04.createTable(db);
+			TableWrapperLevelXX tableLebel05 = new TableWrapperLevelXX(5);
+			tableLebel05.createTable(db);
+			TableWrapperLevelXX tableLebel06 = new TableWrapperLevelXX(6);
+			tableLebel06.createTable(db);
 		}
 
 		@Override
